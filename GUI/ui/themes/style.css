@@ -1,0 +1,27 @@
+PlotWidget {
+    border: 0 solid;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+QGroupBox {
+    border: 0 solid;
+    padding: 0;
+}
+
+QGroupBox#cpu_info QLabel {
+    font-size: 18px;
+}
+
+QGroupBox#ram_info QLabel {
+    font-size: 18px;
+}
+
+QGroupBox#cpu_details QLabel {
+    font-size: 12px;
+}
+
+QGroupBox#ram_details QLabel {
+    font-size: 12px;
+}
+
+
