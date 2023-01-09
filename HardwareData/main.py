@@ -1,12 +1,16 @@
+from platform import system
 from .system import System
 from .cpu import CPU
 from .ram import RAM
+from .gpu import GPU
 
 class Data:
     def __init__(self):
-        self.system = System()
-        self.cpu = CPU()
-        self.memory = RAM()
+        os = system().lower()
+        self.system = System(os)
+        self.cpu = CPU(os)
+        self.memory = RAM(os)
+        self.gpu = GPU(os)
         self._data = set(x for x in list(self.__dict__.values()))
 
     def update(self):

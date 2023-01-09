@@ -1,11 +1,7 @@
 from collections import deque
-from enum import StrEnum
 from itertools import repeat
-from platform import system
-from psutil import virtual_memory
-OS = system().lower()
-
-if OS == "windows":
+from psutil import virtual_memory, WINDOWS
+if WINDOWS:
     from winstats import get_perf_data as get_perf
     from .perfmons import Perfmon
 
@@ -53,8 +49,8 @@ class _Windows(_Generic):
 class RAM:
     _platforms = dict(windows=_Windows, linux=_Linux)
 
-    def __new__(cls, *args, **kwargs):
-        if OS not in cls._platforms.keys():
+    def __new__(cls, os, *args, **kwargs):
+        if os not in cls._platforms.keys():
             raise NotImplementedError("Your operating system is not supported.")
         else:
-            return cls._platforms.get(OS)()
+            return cls._platforms.get(os)()

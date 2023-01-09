@@ -20,7 +20,7 @@ class Worker(QRunnable):
         try:
             self._fn(*self._args, **self._kwargs)
         except:
-            traceback.print_exc()
+            # traceback.print_exc()
             exec_type, value = sys.exc_info()[:2]
             self.signals.error.emit((exec_type, value, traceback.format_exc()))
         else:

@@ -70,7 +70,7 @@ class Ui_cpu_tab(object):
         font2.setBold(False)
         font2.setKerning(True)
         self.processes.setFont(font2)
-        self.processes.setFrameShape(QFrame.NoFrame)
+        self.processes.setFrameShape(QFrame.Shape.NoFrame)
         self.processes.setTextFormat(Qt.AutoText)
 
         self.gridLayout.addWidget(self.processes, 3, 0, 1, 1)
@@ -78,7 +78,7 @@ class Ui_cpu_tab(object):
         self.threads = QLabel(self.cpu_info)
         self.threads.setObjectName(u"threads")
         self.threads.setFont(font2)
-        self.threads.setFrameShape(QFrame.NoFrame)
+        self.threads.setFrameShape(QFrame.Shape.NoFrame)
         self.threads.setTextFormat(Qt.AutoText)
 
         self.gridLayout.addWidget(self.threads, 4, 0, 1, 1)
@@ -90,7 +90,7 @@ class Ui_cpu_tab(object):
         font3.setPointSize(12)
         font3.setBold(False)
         self.pkg_usage.setFont(font3)
-        self.pkg_usage.setFrameShape(QFrame.NoFrame)
+        self.pkg_usage.setFrameShape(QFrame.Shape.NoFrame)
         self.pkg_usage.setTextFormat(Qt.AutoText)
 
         self.gridLayout.addWidget(self.pkg_usage, 0, 0, 1, 1)
@@ -98,7 +98,7 @@ class Ui_cpu_tab(object):
         self.pkg_clk = QLabel(self.cpu_info)
         self.pkg_clk.setObjectName(u"pkg_clk")
         self.pkg_clk.setFont(font2)
-        self.pkg_clk.setFrameShape(QFrame.NoFrame)
+        self.pkg_clk.setFrameShape(QFrame.Shape.NoFrame)
         self.pkg_clk.setTextFormat(Qt.AutoText)
 
         self.gridLayout.addWidget(self.pkg_clk, 1, 0, 1, 1)
@@ -189,10 +189,10 @@ class cpu_tab(QWidget, Ui_cpu_tab):
 
     def draw(self):
         self.data_line.setData(range(60), self._monitor.data.cpu.plot_data)
-        self.pkg_usage.setText(f'{self.pkg_usage.text().split(": ")[0]}: {min(self._monitor.data.cpu.pkg_usage, 100)}%')
+        self.pkg_usage.setText(f'{self.pkg_usage.text().split(": ")[0]}: {self._monitor.data.cpu.pkg_usage}%')
         self.pkg_clk.setText(f'{self.pkg_clk.text().split(": ")[0]}: {to_units(self._monitor.data.cpu.pkg_clk, offset=-6, suffix="Hz")}')
         self.temperature.setText(
-            f'{self.temperature.text().split(": ")[0]}: {self._monitor.data.cpu.temp_celsius}°C/{self._monitor.data.cpu.temp_fahrenheit}°F')
+            f'{self.temperature.text().split(": ")[0]}: {self._monitor.data.cpu.temperature}°C')
         self.processes.setText(f'{self.processes.text().split(": ")[0]}: {self._monitor.data.cpu.processes}')
         self.threads.setText(f'{self.threads.text().split(": ")[0]}: {self._monitor.data.cpu.threads}')
 

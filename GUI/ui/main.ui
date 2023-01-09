@@ -60,7 +60,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -78,6 +78,16 @@
       <widget class="ram_tab" name="memory_tab">
        <attribute name="title">
         <string>RAM</string>
+       </attribute>
+      </widget>
+      <widget class="gpu_tab" name="gpu_tab">
+       <attribute name="title">
+        <string>GPU</string>
+       </attribute>
+      </widget>
+      <widget class="history_tab" name="history_tab">
+       <attribute name="title">
+        <string>History</string>
        </attribute>
       </widget>
      </widget>
@@ -102,6 +112,18 @@
    <class>system_tab</class>
    <extends>QWidget</extends>
    <header>.system</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>history_tab</class>
+   <extends>QWidget</extends>
+   <header>.history</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>gpu_tab</class>
+   <extends>QWidget</extends>
+   <header>.gpu</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
