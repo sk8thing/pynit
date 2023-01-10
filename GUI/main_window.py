@@ -74,14 +74,14 @@ class Ui_main_window(object):
 
         self.retranslateUi(main_window)
 
-        self.tab_container.setCurrentIndex(3)
+        self.tab_container.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(main_window)
     # setupUi
 
     def retranslateUi(self, main_window):
-        main_window.setWindowTitle(QCoreApplication.translate("main_window", u"Pynit", None))
+        main_window.setWindowTitle(QCoreApplication.translate("main_window", u"pynit", None))
         self.tab_container.setTabText(self.tab_container.indexOf(self.system_tab), QCoreApplication.translate("main_window", u"System", None))
         self.tab_container.setTabText(self.tab_container.indexOf(self.processor_tab), QCoreApplication.translate("main_window", u"CPU", None))
         self.tab_container.setTabText(self.tab_container.indexOf(self.memory_tab), QCoreApplication.translate("main_window", u"RAM", None))
@@ -96,10 +96,12 @@ class main_window(QMainWindow, Ui_main_window):
         self.setupUi(self)
         self.setWindowIcon(QIcon(":/icons/icon"))
         self.tab_container.tabBar().setDocumentMode(True)
-        self._components = {self.system_tab, self.processor_tab, self.memory_tab, self.gpu_tab, self.history_tab}
+        self._components = {self.system_tab, self.processor_tab, self.memory_tab, self.history_tab}
         self._monitor = Monitor()
-        if self._monitor.data.gpu.brand is None:
-            self.tab_container.removeTab(self.gpu_tab)
+        if self._monitor.data.gpu is None:
+            self.tab_container.removeTab(3)
+        else:
+            self._components.add(self.gpu_tab)
         self._monitor.worker.callback = self.draw
 
     @Slot()

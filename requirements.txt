@@ -12,3 +12,4 @@ shiboken6~=6.4.1
 winstats~=0.80
 pyadl~=0.1
 winstats~=0.80
+distro~=1.8.0

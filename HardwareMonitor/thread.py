@@ -2,7 +2,6 @@ import sys
 import traceback
 from PySide6.QtCore import QObject, Signal, QRunnable, Slot, QThreadPool, QTimer
 
-
 class Worker_Signals(QObject):
     tick = Signal()
     error = Signal(tuple)
@@ -20,7 +19,7 @@ class Worker(QRunnable):
         try:
             self._fn(*self._args, **self._kwargs)
         except:
-            # traceback.print_exc()
+            traceback.print_exc()
             exec_type, value = sys.exc_info()[:2]
             self.signals.error.emit((exec_type, value, traceback.format_exc()))
         else:

@@ -107,16 +107,18 @@ class gpu_tab(QWidget, Ui_gpu_tab):
         self.setupUi(self)
 
         self._monitor = Monitor()
-        self.chipset.setText(f'{self.chipset.text().split(": ")[0]}: {self._monitor.data.gpu.brand}')
-        self.name.setText(f'{self.name.text().split(": ")[0]}: {self._monitor.data.gpu.name}')
+        if self._monitor.data.gpu is not None:
+            self.chipset.setText(f'{self.chipset.text().split(": ")[0]}: {self._monitor.data.gpu.brand}')
+            self.name.setText(f'{self.name.text().split(": ")[0]}: {self._monitor.data.gpu.name}')
 
-        self.gpu_plot.plotItem.invertX(True)
-        self.gpu_plot.plotItem.setLabel("bottom", "Time", units="seconds", **self.gpu_plot.style)
-        self.gpu_plot.plotItem.setLabel("left", "GPU Usage", units="%", **self.gpu_plot.style)
-        self.data_line = self.gpu_plot.plot(range(60), list(repeat(0, 60)), 60, pen=(50, 50, 200), fillLevel=0,
-                                                brush=(50, 50, 200, 100))
+            self.gpu_plot.plotItem.invertX(True)
+            self.gpu_plot.plotItem.setLabel("bottom", "Time", units="seconds", **self.gpu_plot.style)
+            self.gpu_plot.plotItem.setLabel("left", "GPU Usage", units="%", **self.gpu_plot.style)
+            self.data_line = self.gpu_plot.plot(range(60), list(repeat(0, 60)), 60, pen=(50, 50, 200), fillLevel=0,
+                                                    brush=(50, 50, 200, 100))
 
     def draw(self):
-        self.load.setText(f'{self.load.text().split(": ")[0]}: {self._monitor.data.gpu.load}%')
-        self.temperature.setText(f'{self.temperature.text().split(": ")[0]}: {self._monitor.data.gpu.temperature}°C')
-        self.data_line.setData(range(60), self._monitor.data.gpu.plot_data)
+        if self._monitor.data.gpu is not None:
+            self.load.setText(f'{self.load.text().split(": ")[0]}: {self._monitor.data.gpu.load}%')
+            self.temperature.setText(f'{self.temperature.text().split(": ")[0]}: {self._monitor.data.gpu.temperature}°C')
+            self.data_line.setData(range(60), self._monitor.data.gpu.plot_data)

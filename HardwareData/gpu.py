@@ -20,25 +20,28 @@ class _Generic(object):
 class _AMD(_Generic):
     def __init__(self):
         super(_AMD, self).__init__()
-        self._device = ADLManager.getInstance().getDevices()[0]
+        device = ADLManager.getInstance().getDevices()[0]
         self.brand = "AMD"
-        self.name = self._device.adapterName
+        self.name = device.adapterName
 
     def update(self):
-        self.load = self._device.getCurrentUsage()
-        self.temperature = round(self._device.getCurrentTemperature())
+        device = ADLManager.getInstance().getDevices()[0]
+        self.load = device.getCurrentUsage()
+        self.temperature = round(device.getCurrentTemperature())
         self.plot_data.appendleft(self.load)
 
 class _NVIDIA(_Generic):
     def __init__(self):
         super(_NVIDIA, self).__init__()
-        self._device = getGPUs()[0]
+        device = getGPUs()[0]
         self.brand = "NVIDIA"
-        self.name = self._device.name
+        self.name = device.name
 
     def update(self):
-        self.load = round(self._device.load)
-        self.temperature = round(self._device.temperature)
+        device = getGPUs()[0]
+        self.load = round(device.load * 100)
+        self.temperature = round(device.temperature)
+        self.plot_data.appendleft(self.load)
 
 class GPU:
     _brands = dict(AMD=_AMD, NVIDIA=_NVIDIA)

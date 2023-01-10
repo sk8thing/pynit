@@ -1,4 +1,5 @@
 from platform import system, release, version, platform, win32_edition, node
+import distro
 from re import match
 from psutil import pids, Process, boot_time
 import datetime
@@ -7,8 +8,8 @@ class _Generic(object):
     def __init__(self):
         self.boot_time = None
         self.release = None
+        self.version = None
         self.os = system()
-        self.version = version()
         self.hostname = node()
         self.process_list = dict()
         self.update()
@@ -35,12 +36,14 @@ class _Generic(object):
 class _Linux(_Generic):
     def __init__(self):
         super(_Linux, self).__init__()
-        self.release = release()
+        self.release = distro.name(pretty=True)
+        self.version = release()
 
 class _Windows(_Generic):
     def __init__(self):
         super(_Windows, self).__init__()
         self.release = self.__win32_release()
+        self.version = version()
 
     @staticmethod
     def __win32_release():

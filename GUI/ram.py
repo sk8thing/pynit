@@ -123,7 +123,7 @@ class Ui_ram_tab(object):
         self.ram_details.setTitle("")
         self.available.setText(QCoreApplication.translate("ram", u"Available: ", None))
         self.standby.setText(QCoreApplication.translate("ram", u"Standby: ", None))
-        self.modified.setText(QCoreApplication.translate("ram", u"Modified: ", None))
+        self.modified.setText(QCoreApplication.translate("ram", u"Modified/Swap: ", None))
         self.free.setText(QCoreApplication.translate("ram", u"Free/Inactive: ", None))
         self.total.setText(QCoreApplication.translate("ram", u"Total: ", None))
         self.in_use.setText(QCoreApplication.translate("ram", u"In use: ", None))

@@ -100,23 +100,29 @@ class history_tab(QWidget, Ui_history_tab):
         self.list.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.list.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
         self._model = List_Model([[0 for col in range(4)] for row in range(3)],
-                                 ["CPU Usage[%]", "CPU Temperature[°C]", "Memory Usage[%]"],
+                                 ["CPU Usage[%]", "CPU Temperature[°C]", "Memory Usage[%]", "GPU Usage[%]", "GPU Temperature[°C]"],
                                  ["Current", "Min", "Max", "Avg"])
-        self._iter = 1
         self.list.setModel(self._model)
+        if self._monitor.data.gpu is not None:
+            self._model.insertRow(self._model.rowCount() - 1, rowData=[0 for x in range(4)])
+            self._model.insertRow(self._model.rowCount() - 1, rowData=[0 for x in range(4)])
 
     def __reset(self):
         self._started = datetime.now()
-        self._iter = 1
         data = [self._monitor.data.cpu.pkg_usage, self._monitor.data.cpu.temperature, self._monitor.data.memory.usage]
+        if self._monitor.data.gpu is not None:
+            data.extend([self._monitor.data.gpu.load, self._monitor.data.gpu.temperature])
         for x in range(self._model.rowCount()):
             for y in range(self._model.columnCount()):
                 index = self._model.index(x, y)
                 self._model.setData(index, data[x])
 
     def draw(self):
-        self.delta.setText(f'{self.delta.text().split(": ")[0]}: {str(datetime.now() - self._started).split(".")[0]}')
+        delta = datetime.now() - self._started
+        self.delta.setText(f'{self.delta.text().split(": ")[0]}: {str(delta).split(".")[0]}')
         data = [self._monitor.data.cpu.pkg_usage, self._monitor.data.cpu.temperature, self._monitor.data.memory.usage]
+        if self._monitor.data.gpu is not None:
+            data.extend([self._monitor.data.gpu.load, self._monitor.data.gpu.temperature])
         for x in range(self._model.rowCount()):
             for y in range(self._model.columnCount()):
                 index = self._model.index(x, y)
@@ -127,5 +133,6 @@ class history_tab(QWidget, Ui_history_tab):
                 elif y == 2:
                     self._model.setData(index, max(data[x], self._model.data(index) or data[x]))
                 elif y == 3:
-                    self._model.setData(index, round(((self._model.data(index) * self._iter) + data[x]) / (self._iter + 1)) or data[x])
-        self._iter += 1
+                    self._model.setData(index, round(
+                        ((self._model.data(index) * round(delta.total_seconds())) + data[x]) / (
+                                    round(delta.total_seconds()) + 1)) or data[x])
