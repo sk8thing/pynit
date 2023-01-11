@@ -1,7 +1,6 @@
 PlotWidget {
     border: 0 solid;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0;
 }
 QGroupBox {
     border: 0 solid;
@@ -50,6 +49,7 @@ QHeaderView {
     padding: 0;
 }
 
-QTableWidget {
+QTableView {
     padding: 0;
+    border: 0 solid;
 }

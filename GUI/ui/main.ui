@@ -44,7 +44,7 @@
    <enum>Qt::DefaultContextMenu</enum>
   </property>
   <property name="windowTitle">
-   <string>&lt;empty&gt;</string>
+   <string>pynit</string>
   </property>
   <widget class="QWidget" name="central_widget">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -78,6 +78,11 @@
       <widget class="ram_tab" name="memory_tab">
        <attribute name="title">
         <string>RAM</string>
+       </attribute>
+      </widget>
+      <widget class="disk_tab" name="disk_tab">
+       <attribute name="title">
+        <string>Disk</string>
        </attribute>
       </widget>
       <widget class="gpu_tab" name="gpu_tab">
@@ -124,6 +129,12 @@
    <class>gpu_tab</class>
    <extends>QWidget</extends>
    <header>.gpu</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>disk_tab</class>
+   <extends>QWidget</extends>
+   <header>.disk</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

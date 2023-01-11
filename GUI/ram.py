@@ -129,9 +129,6 @@ class Ui_ram_tab(object):
         self.in_use.setText(QCoreApplication.translate("ram", u"In use: ", None))
     # retranslateUi
 
-
-
-
 class ram_tab(QWidget, Ui_ram_tab):
     def __init__(self, parent=None):
         super(ram_tab, self).__init__(parent)

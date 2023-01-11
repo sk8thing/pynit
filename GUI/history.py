@@ -22,7 +22,6 @@ from PySide6.QtWidgets import (QApplication, QGridLayout, QGroupBox, QHeaderView
 from HardwareMonitor import Monitor
 from .list_model import List_Model
 from datetime import datetime
-from itertools import repeat
 
 class Ui_history_tab(object):
     def setupUi(self, history_tab):
@@ -50,7 +49,7 @@ class Ui_history_tab(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.reset_button = QPushButton(self.history_info)
         self.reset_button.setObjectName(u"reset_button")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.reset_button.sizePolicy().hasHeightForWidth())
@@ -96,9 +95,8 @@ class history_tab(QWidget, Ui_history_tab):
         self._started = datetime.now()
         self.reset_button.clicked.connect(self.__reset)
 
-        self.list.horizontalHeader().setStretchLastSection(True)
         self.list.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-        self.list.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
+        self.list.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self._model = List_Model([[0 for col in range(4)] for row in range(3)],
                                  ["CPU Usage[%]", "CPU Temperature[°C]", "Memory Usage[%]", "GPU Usage[%]", "GPU Temperature[°C]"],
                                  ["Current", "Min", "Max", "Avg"])

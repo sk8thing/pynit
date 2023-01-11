@@ -20,9 +20,10 @@ from PySide6.QtWidgets import (QApplication, QHBoxLayout, QMainWindow, QSizePoli
 
 from .resources import *
 from HardwareMonitor import Monitor
+from .system import system_tab
 from .cpu import cpu_tab
 from .ram import ram_tab
-from .system import system_tab
+from .disk import disk_tab
 from .history import history_tab
 from .gpu import gpu_tab
 
@@ -61,6 +62,9 @@ class Ui_main_window(object):
         self.memory_tab = ram_tab()
         self.memory_tab.setObjectName(u"memory_tab")
         self.tab_container.addTab(self.memory_tab, "")
+        self.disk_tab = disk_tab()
+        self.disk_tab.setObjectName(u"disk_tab")
+        self.tab_container.addTab(self.disk_tab, "")
         self.gpu_tab = gpu_tab()
         self.gpu_tab.setObjectName(u"gpu_tab")
         self.tab_container.addTab(self.gpu_tab, "")
@@ -85,6 +89,7 @@ class Ui_main_window(object):
         self.tab_container.setTabText(self.tab_container.indexOf(self.system_tab), QCoreApplication.translate("main_window", u"System", None))
         self.tab_container.setTabText(self.tab_container.indexOf(self.processor_tab), QCoreApplication.translate("main_window", u"CPU", None))
         self.tab_container.setTabText(self.tab_container.indexOf(self.memory_tab), QCoreApplication.translate("main_window", u"RAM", None))
+        self.tab_container.setTabText(self.tab_container.indexOf(self.disk_tab), QCoreApplication.translate("main_window", u"Disk", None))
         self.tab_container.setTabText(self.tab_container.indexOf(self.gpu_tab), QCoreApplication.translate("main_window", u"GPU", None))
         self.tab_container.setTabText(self.tab_container.indexOf(self.history_tab), QCoreApplication.translate("main_window", u"History", None))
     # retranslateUi
@@ -96,10 +101,11 @@ class main_window(QMainWindow, Ui_main_window):
         self.setupUi(self)
         self.setWindowIcon(QIcon(":/icons/icon"))
         self.tab_container.tabBar().setDocumentMode(True)
-        self._components = {self.system_tab, self.processor_tab, self.memory_tab, self.history_tab}
+        self.setWindowState(Qt.WindowState.WindowActive)
+        self._components = {self.system_tab, self.processor_tab, self.memory_tab, self.disk_tab, self.history_tab}
         self._monitor = Monitor()
         if self._monitor.data.gpu is None:
-            self.tab_container.removeTab(3)
+            self.tab_container.removeTab(4)
         else:
             self._components.add(self.gpu_tab)
         self._monitor.worker.callback = self.draw

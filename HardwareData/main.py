@@ -3,6 +3,7 @@ from .system import System
 from .cpu import CPU
 from .ram import RAM
 from .gpu import GPU
+from .disk import Disk
 
 class Data:
     def __init__(self):
@@ -10,7 +11,8 @@ class Data:
         self.system = System(os)
         self.cpu = CPU(os)
         self.memory = RAM(os)
-        self.gpu = GPU(os)
+        self.disk = Disk()
+        self.gpu = GPU()
         self._data = set(x for x in list(self.__dict__.values()))
 
     def update(self):
