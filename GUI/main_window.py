@@ -8,31 +8,27 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect,
-                            QSize, QTime, QUrl, Qt, Slot)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QMainWindow, QSizePolicy,
-    QTabWidget, QWidget)
+from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, Slot)
+from PySide6.QtGui import (QIcon)
+from PySide6.QtWidgets import (QHBoxLayout, QMainWindow, QSizePolicy,
+                               QTabWidget, QWidget)
 
-from .resources import *
 from HardwareMonitor import Monitor
-from .system import system_tab
 from .cpu import cpu_tab
-from .ram import ram_tab
 from .disk import disk_tab
-from .history import history_tab
 from .gpu import gpu_tab
+from .history import history_tab
+from .ram import ram_tab
+from .system import system_tab
+from .resources import *
+
 
 class Ui_main_window(object):
     def setupUi(self, main_window):
         if not main_window.objectName():
             main_window.setObjectName(u"main_window")
         main_window.resize(960, 540)
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(main_window.sizePolicy().hasHeightForWidth())
@@ -41,18 +37,18 @@ class Ui_main_window(object):
         main_window.setSizeIncrement(QSize(16, 9))
         main_window.setBaseSize(QSize(960, 540))
         main_window.setTabletTracking(True)
-        main_window.setFocusPolicy(Qt.NoFocus)
-        main_window.setContextMenuPolicy(Qt.DefaultContextMenu)
+        main_window.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        main_window.setContextMenuPolicy(Qt.ContextMenuPolicy.DefaultContextMenu)
         self.central_widget = QWidget(main_window)
         self.central_widget.setObjectName(u"central_widget")
         self.horizontalLayout = QHBoxLayout(self.central_widget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.tab_container = QTabWidget(self.central_widget)
         self.tab_container.setObjectName(u"tab_container")
-        self.tab_container.setLayoutDirection(Qt.LeftToRight)
+        self.tab_container.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.tab_container.setTabPosition(QTabWidget.TabPosition.West)
         self.tab_container.setTabShape(QTabWidget.TabShape.Rounded)
-        self.tab_container.setElideMode(Qt.ElideNone)
+        self.tab_container.setElideMode(Qt.TextElideMode.ElideNone)
         self.system_tab = system_tab()
         self.system_tab.setObjectName(u"system_tab")
         self.tab_container.addTab(self.system_tab, "")
@@ -80,18 +76,23 @@ class Ui_main_window(object):
 
         self.tab_container.setCurrentIndex(0)
 
-
         QMetaObject.connectSlotsByName(main_window)
     # setupUi
 
     def retranslateUi(self, main_window):
         main_window.setWindowTitle(QCoreApplication.translate("main_window", u"pynit", None))
-        self.tab_container.setTabText(self.tab_container.indexOf(self.system_tab), QCoreApplication.translate("main_window", u"System", None))
-        self.tab_container.setTabText(self.tab_container.indexOf(self.processor_tab), QCoreApplication.translate("main_window", u"CPU", None))
-        self.tab_container.setTabText(self.tab_container.indexOf(self.memory_tab), QCoreApplication.translate("main_window", u"RAM", None))
-        self.tab_container.setTabText(self.tab_container.indexOf(self.disk_tab), QCoreApplication.translate("main_window", u"Disk", None))
-        self.tab_container.setTabText(self.tab_container.indexOf(self.gpu_tab), QCoreApplication.translate("main_window", u"GPU", None))
-        self.tab_container.setTabText(self.tab_container.indexOf(self.history_tab), QCoreApplication.translate("main_window", u"History", None))
+        self.tab_container.setTabText(self.tab_container.indexOf(self.system_tab),
+                                      QCoreApplication.translate("main_window", u"System", None))
+        self.tab_container.setTabText(self.tab_container.indexOf(self.processor_tab),
+                                      QCoreApplication.translate("main_window", u"CPU", None))
+        self.tab_container.setTabText(self.tab_container.indexOf(self.memory_tab),
+                                      QCoreApplication.translate("main_window", u"RAM", None))
+        self.tab_container.setTabText(self.tab_container.indexOf(self.disk_tab),
+                                      QCoreApplication.translate("main_window", u"Disk", None))
+        self.tab_container.setTabText(self.tab_container.indexOf(self.gpu_tab),
+                                      QCoreApplication.translate("main_window", u"GPU", None))
+        self.tab_container.setTabText(self.tab_container.indexOf(self.history_tab),
+                                      QCoreApplication.translate("main_window", u"History", None))
     # retranslateUi
 
 

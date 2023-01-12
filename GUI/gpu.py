@@ -8,19 +8,14 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QGroupBox, QLabel,
-    QSizePolicy, QVBoxLayout, QWidget)
+from PySide6.QtCore import (QCoreApplication, QMetaObject)
+from PySide6.QtGui import (QFont)
+from PySide6.QtWidgets import (QGridLayout, QGroupBox, QLabel,
+                               QSizePolicy, QVBoxLayout, QWidget)
 
+from HardwareMonitor import Monitor
 from .plot import Plot
 from itertools import repeat
-from HardwareMonitor import Monitor
 
 
 class Ui_gpu_tab(object):
@@ -69,7 +64,6 @@ class Ui_gpu_tab(object):
 
         self.verticalLayout_2.addWidget(self.name)
 
-
         self.gridLayout.addWidget(self.gpu_details, 0, 1, 2, 1)
 
         self.load = QLabel(self.gpu_info)
@@ -82,9 +76,7 @@ class Ui_gpu_tab(object):
 
         self.gridLayout.addWidget(self.temperature, 1, 0, 1, 1)
 
-
         self.verticalLayout.addWidget(self.gpu_info)
-
 
         self.retranslateUi(gpu_tab)
 
@@ -101,6 +93,7 @@ class Ui_gpu_tab(object):
         self.temperature.setText(QCoreApplication.translate("gpu_tab", u"Temperature: ", None))
     # retranslateUi
 
+
 class gpu_tab(QWidget, Ui_gpu_tab):
     def __init__(self, parent=None):
         super(gpu_tab, self).__init__(parent)
@@ -115,10 +108,11 @@ class gpu_tab(QWidget, Ui_gpu_tab):
             self.gpu_plot.plotItem.setLabel("bottom", "Time", units="seconds", **self.gpu_plot.style)
             self.gpu_plot.plotItem.setLabel("left", "GPU Usage", units="%", **self.gpu_plot.style)
             self.data_line = self.gpu_plot.plot(range(60), list(repeat(0, 60)), 60, pen=(50, 50, 200), fillLevel=0,
-                                                    brush=(50, 50, 200, 100))
+                                                brush=(50, 50, 200, 100))
 
     def draw(self):
         if self._monitor.data.gpu is not None:
             self.load.setText(f'{self.load.text().split(": ")[0]}: {self._monitor.data.gpu.load}%')
-            self.temperature.setText(f'{self.temperature.text().split(": ")[0]}: {self._monitor.data.gpu.temperature}°C')
+            self.temperature.setText(
+                f'{self.temperature.text().split(": ")[0]}: {self._monitor.data.gpu.temperature}°C')
             self.data_line.setData(range(60), self._monitor.data.gpu.plot_data)

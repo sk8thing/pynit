@@ -8,21 +8,17 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QGroupBox, QLabel,
-                               QSizePolicy, QVBoxLayout, QWidget, QGraphicsView, QToolTip)
+from PySide6.QtCore import (QCoreApplication, QMetaObject)
+from PySide6.QtGui import (QFont)
+from PySide6.QtWidgets import (QGridLayout, QGroupBox, QLabel,
+                               QSizePolicy, QVBoxLayout, QWidget)
 
-from .plot import Plot
 from pyqtgraph import BarGraphItem
 from itertools import repeat
-from HardwareMonitor import Monitor
 from HardwareData import to_units
+from HardwareMonitor import Monitor
+from .plot import Plot
+
 
 class Ui_ram_tab(object):
     def setupUi(self, ram):
@@ -38,7 +34,7 @@ class Ui_ram_tab(object):
 
         self.comp_plot = Plot(ram, grid=False)
         self.comp_plot.setObjectName(u"comp_plot")
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.comp_plot.sizePolicy().hasHeightForWidth())
@@ -48,7 +44,7 @@ class Ui_ram_tab(object):
 
         self.ram_info = QGroupBox(ram)
         self.ram_info.setObjectName(u"ram_info")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.ram_info.sizePolicy().hasHeightForWidth())
@@ -92,7 +88,6 @@ class Ui_ram_tab(object):
 
         self.verticalLayout_2.addWidget(self.free)
 
-
         self.gridLayout.addWidget(self.ram_details, 0, 1, 3, 1)
 
         self.total = QLabel(self.ram_info)
@@ -107,9 +102,7 @@ class Ui_ram_tab(object):
 
         self.gridLayout.addWidget(self.in_use, 2, 0, 1, 1)
 
-
         self.verticalLayout.addWidget(self.ram_info)
-
 
         self.retranslateUi(ram)
 
@@ -129,6 +122,7 @@ class Ui_ram_tab(object):
         self.in_use.setText(QCoreApplication.translate("ram", u"In use: ", None))
     # retranslateUi
 
+
 class ram_tab(QWidget, Ui_ram_tab):
     def __init__(self, parent=None):
         super(ram_tab, self).__init__(parent)
@@ -141,14 +135,15 @@ class ram_tab(QWidget, Ui_ram_tab):
         self.ram_plot.plotItem.setLabel("bottom", "Time", units="seconds", **self.ram_plot.style)
         self.ram_plot.plotItem.setLabel("left", "RAM Usage", units="%", **self.ram_plot.style)
         self.data_line = self.ram_plot.plot(range(60), list(repeat(0, 60)), 60, pen=(50, 50, 200), fillLevel=0,
-                                                brush=(50, 50, 200, 100))
+                                            brush=(50, 50, 200, 100))
 
         self.comp_plot.plotItem.hideAxis("bottom")
         self.comp_plot.plotItem.hideAxis("left")
         self.comp_plot.plotItem.setYRange(0, 0.1)
         self.bars = list()
         for x in range(4):
-            self.bars.append(BarGraphItem(x0=[0], height=[0], width=0, pen=(50, 50, 200), brush=(50 + 50 * x, 50 + 50 * x, 200, 100)))
+            self.bars.append(BarGraphItem(x0=[0], height=[0], width=0, pen=(50, 50, 200),
+                                          brush=(50 + 50 * x, 50 + 50 * x, 200, 100)))
             self.comp_plot.plotItem.addItem(self.bars[x])
 
     def draw(self):
@@ -167,4 +162,3 @@ class ram_tab(QWidget, Ui_ram_tab):
                 x0=[self.bars[index - 1 or 0].boundingRect().width() + self.bars[index - 1 or 0].boundingRect().left()],
                 height=[0.1], width=value)
             self.bars[index].setToolTip(f'{key}: {value}MB')
-

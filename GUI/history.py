@@ -8,20 +8,15 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QGroupBox, QHeaderView,
-                               QLabel, QPushButton, QSizePolicy, QTableWidget,
-                               QTableWidgetItem, QVBoxLayout, QWidget, QTableView, QAbstractItemView)
+from PySide6.QtCore import (QCoreApplication, QMetaObject, Qt)
+from PySide6.QtGui import (QFont)
+from PySide6.QtWidgets import (QGridLayout, QGroupBox, QHeaderView,
+                               QLabel, QPushButton, QSizePolicy, QVBoxLayout, QWidget, QTableView, QAbstractItemView)
 
 from HardwareMonitor import Monitor
 from .list_model import List_Model
 from datetime import datetime
+
 
 class Ui_history_tab(object):
     def setupUi(self, history_tab):
@@ -65,13 +60,12 @@ class Ui_history_tab(object):
         font1 = QFont()
         font1.setPointSize(18)
         self.delta.setFont(font1)
-        self.delta.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.delta.setAlignment(
+            Qt.AlignmentFlag.AlignLeading | Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.delta, 0, 1, 1, 1)
 
-
         self.verticalLayout.addWidget(self.history_info)
-
 
         self.retranslateUi(history_tab)
 
@@ -98,7 +92,8 @@ class history_tab(QWidget, Ui_history_tab):
         self.list.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.list.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self._model = List_Model([[0 for col in range(4)] for row in range(3)],
-                                 ["CPU Usage[%]", "CPU Temperature[°C]", "Memory Usage[%]", "GPU Usage[%]", "GPU Temperature[°C]"],
+                                 ["CPU Usage[%]", "CPU Temperature[°C]", "Memory Usage[%]", "GPU Usage[%]",
+                                  "GPU Temperature[°C]"],
                                  ["Current", "Min", "Max", "Avg"])
         self.list.setModel(self._model)
         if self._monitor.data.gpu is not None:
@@ -133,4 +128,4 @@ class history_tab(QWidget, Ui_history_tab):
                 elif y == 3:
                     self._model.setData(index, round(
                         ((self._model.data(index) * round(delta.total_seconds())) + data[x]) / (
-                                    round(delta.total_seconds()) + 1)) or data[x])
+                                round(delta.total_seconds()) + 1)) or data[x])
