@@ -1,5 +1,6 @@
-import operator
 from PySide6.QtCore import QAbstractTableModel, Qt, QModelIndex
+
+import operator
 
 
 class List_Model(QAbstractTableModel):

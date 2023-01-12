@@ -1,4 +1,5 @@
 # Source: https://github.com/pydata/numexpr/blob/master/numexpr/cpuinfo.py
+
 ###################################################################
 #  cpuinfo - Get information about CPU
 #

@@ -8,27 +8,23 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGroupBox, QHBoxLayout, QSizePolicy,
-                               QWidget, QVBoxLayout, QFormLayout, QLabel, QFrame, QGridLayout)
+from PySide6.QtCore import (QCoreApplication, QMetaObject, Qt)
+from PySide6.QtGui import (QFont)
+from PySide6.QtWidgets import (QGroupBox, QSizePolicy,
+                               QWidget, QVBoxLayout, QLabel, QFrame, QGridLayout)
 
-from .plot import Plot
-from HardwareMonitor import Monitor
 from HardwareData import to_units
+from HardwareMonitor import Monitor
+from .plot import Plot
 from itertools import repeat
+
 
 class Ui_cpu_tab(object):
     def setupUi(self, cpu):
         if not cpu.objectName():
             cpu.setObjectName(u"cpu")
         cpu.resize(960, 540)
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(cpu.sizePolicy().hasHeightForWidth())
@@ -41,7 +37,7 @@ class Ui_cpu_tab(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.cpu_plot = Plot(cpu, limits=((0, 60), (0, 100)))
         self.cpu_plot.setObjectName(u"cpu_plot")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.cpu_plot.sizePolicy().hasHeightForWidth())
@@ -52,7 +48,7 @@ class Ui_cpu_tab(object):
 
         self.cpu_info = QGroupBox(cpu)
         self.cpu_info.setObjectName(u"cpu_info")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.cpu_info.sizePolicy().hasHeightForWidth())
@@ -135,7 +131,6 @@ class Ui_cpu_tab(object):
 
         self.verticalLayout_2.addWidget(self.logical)
 
-
         self.gridLayout.addWidget(self.cpu_details, 0, 1, 5, 1)
 
         self.temperature = QLabel(self.cpu_info)
@@ -143,9 +138,7 @@ class Ui_cpu_tab(object):
 
         self.gridLayout.addWidget(self.temperature, 2, 0, 1, 1)
 
-
         self.verticalLayout.addWidget(self.cpu_info)
-
 
         self.retranslateUi(cpu)
 
@@ -177,7 +170,8 @@ class cpu_tab(QWidget, Ui_cpu_tab):
         self._monitor = Monitor()
         self.processor.setText(f'{self.processor.text().split(": ")[0]}: {self._monitor.data.cpu.brand}')
         self.arch.setText(f'{self.arch.text().split(": ")[0]}: {self._monitor.data.cpu.arch}')
-        self.base_clk.setText(f'{self.base_clk.text().split(": ")[0]}: {to_units(self._monitor.data.cpu.base_clk, offset=-6, suffix="Hz")}')
+        self.base_clk.setText(
+            f'{self.base_clk.text().split(": ")[0]}: {to_units(self._monitor.data.cpu.base_clk, offset=-6, suffix="Hz")}')
         self.cores.setText(f'{self.cores.text().split(": ")[0]}: {self._monitor.data.cpu.cores}')
         self.logical.setText(f'{self.logical.text().split(": ")[0]}: {self._monitor.data.cpu.logical}')
 
@@ -185,16 +179,14 @@ class cpu_tab(QWidget, Ui_cpu_tab):
         self.cpu_plot.plotItem.setLabel("bottom", "Time", units="seconds", **self.cpu_plot.style)
         self.cpu_plot.plotItem.setLabel("left", "CPU Usage", units="%", **self.cpu_plot.style)
         self.data_line = self.cpu_plot.plot(range(60), list(repeat(0, 60)), 60, pen=(50, 50, 200), fillLevel=0,
-                                                brush=(50, 50, 200, 100))
+                                            brush=(50, 50, 200, 100))
 
     def draw(self):
         self.data_line.setData(range(60), self._monitor.data.cpu.plot_data)
         self.pkg_usage.setText(f'{self.pkg_usage.text().split(": ")[0]}: {self._monitor.data.cpu.pkg_usage}%')
-        self.pkg_clk.setText(f'{self.pkg_clk.text().split(": ")[0]}: {to_units(self._monitor.data.cpu.pkg_clk, offset=-6, suffix="Hz")}')
+        self.pkg_clk.setText(
+            f'{self.pkg_clk.text().split(": ")[0]}: {to_units(self._monitor.data.cpu.pkg_clk, offset=-6, suffix="Hz")}')
         self.temperature.setText(
             f'{self.temperature.text().split(": ")[0]}: {self._monitor.data.cpu.temperature}°C')
         self.processes.setText(f'{self.processes.text().split(": ")[0]}: {self._monitor.data.cpu.processes}')
         self.threads.setText(f'{self.threads.text().split(": ")[0]}: {self._monitor.data.cpu.threads}')
-
-
-

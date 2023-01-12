@@ -1,9 +1,10 @@
 from pyqtgraph import PlotWidget, ViewBox
 
+
 class Plot(PlotWidget):
     def __init__(self, parent=None, grid=True, no_auto=True, limits=None):
         super(Plot, self).__init__(parent)
-        self.style = {'color': '#969696', 'font-family':'Consolas'}
+        self.style = {'color': '#969696', 'font-family': 'Consolas'}
         self.setBackground(background=None)
         self.plotItem.showGrid(x=grid, y=grid, alpha=0.3)
         self.plotItem.setDefaultPadding(padding=0)

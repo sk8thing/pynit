@@ -8,21 +8,16 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QApplication, QHeaderView, QSizePolicy,
-    QTableView, QVBoxLayout, QWidget)
+from PySide6.QtCore import (QCoreApplication, QMetaObject)
+from PySide6.QtWidgets import (QAbstractItemView, QHeaderView, QSizePolicy,
+                               QTableView, QVBoxLayout, QWidget)
 
+from pyqtgraph import BarGraphItem
+from HardwareData import to_units, readable
 from HardwareMonitor import Monitor
 from .list_model import List_Model
 from .plot import Plot
-from pyqtgraph import BarGraphItem
-from HardwareData import to_units, readable
+
 
 class Ui_disk_tab(object):
     def setupUi(self, disk_tab):
@@ -72,7 +67,6 @@ class Ui_disk_tab(object):
 
         self.verticalLayout.addWidget(self.disk_list)
 
-
         self.retranslateUi(disk_tab)
 
         QMetaObject.connectSlotsByName(disk_tab)
@@ -81,6 +75,7 @@ class Ui_disk_tab(object):
     def retranslateUi(self, disk_tab):
         disk_tab.setWindowTitle(QCoreApplication.translate("disk_tab", u"Form", None))
     # retranslateUi
+
 
 class disk_tab(QWidget, Ui_disk_tab):
     def __init__(self):
@@ -91,15 +86,15 @@ class disk_tab(QWidget, Ui_disk_tab):
         self.part_list.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.part_list.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self._model_part = List_Model(list(self._monitor.data.disk.partitions.values()),
-                                 vertical_header=list(self._monitor.data.disk.partitions.keys()),
-                                 horizontal_header=["Total", "Used", "Free", "Usage[%]", "Format"])
+                                      vertical_header=list(self._monitor.data.disk.partitions.keys()),
+                                      horizontal_header=["Total", "Used", "Free", "Usage[%]", "Format"])
         self.part_list.setModel(self._model_part)
 
         self.disk_list.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.disk_list.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self._model_disk = List_Model(list(self._monitor.data.disk.disks.values()),
-                                 vertical_header=list(self._monitor.data.disk.disks.keys()),
-                                 horizontal_header=["Read Speed", "Write Speed"])
+                                      vertical_header=list(self._monitor.data.disk.disks.keys()),
+                                      horizontal_header=["Read Speed", "Write Speed"])
         self.disk_list.setModel(self._model_disk)
 
         self.comp_plot.plotItem.hideAxis("bottom")
@@ -107,8 +102,10 @@ class disk_tab(QWidget, Ui_disk_tab):
         self.comp_plot.plotItem.setYRange(0, 0.1)
         bars = list()
         bars.append(BarGraphItem(x0=[0], height=[0.1], width=self._monitor.data.disk.total_used, pen=(50, 50, 200),
-                         brush=(50, 50, 200, 100)))
-        bars.append(BarGraphItem(x0=[bars[0].boundingRect().width()], height=[0.1], width=self._monitor.data.disk.total_free, pen=(50, 50, 200),
+                                 brush=(50, 50, 200, 100)))
+        bars.append(
+            BarGraphItem(x0=[bars[0].boundingRect().width()], height=[0.1], width=self._monitor.data.disk.total_free,
+                         pen=(50, 50, 200),
                          brush=(200, 200, 200, 100)))
         bars[0].setToolTip(
             f'Total used space: {to_units(self._monitor.data.disk.total_used, decimals=1, offset=-3, suffix="B")}')

@@ -7,20 +7,16 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect,
-                            QSize, QTime, QUrl, Qt, QSortFilterProxyModel, QAbstractTableModel, QModelIndex)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplication, QGridLayout,
-    QGroupBox, QHeaderView, QLabel, QSizePolicy,
-    QTableView, QVBoxLayout, QWidget)
+from PySide6.QtCore import (QCoreApplication, QMetaObject, Qt)
+from PySide6.QtGui import (QFont)
+from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QGridLayout,
+                               QGroupBox, QHeaderView, QLabel, QSizePolicy,
+                               QTableView, QVBoxLayout, QWidget)
 
 from HardwareMonitor import Monitor
-from itertools import zip_longest
 from .list_model import List_Model
+from itertools import zip_longest
+
 
 class Ui_system_tab(object):
     def setupUi(self, system):
@@ -31,7 +27,7 @@ class Ui_system_tab(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.system_info = QGroupBox(system)
         self.system_info.setObjectName(u"system_info")
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.system_info.sizePolicy().hasHeightForWidth())
@@ -66,12 +62,11 @@ class Ui_system_tab(object):
 
         self.gridLayout.addWidget(self.uptime, 1, 1, 1, 1)
 
-
         self.verticalLayout.addWidget(self.system_info)
 
         self.process_list = QTableView(system)
         self.process_list.setObjectName(u"process_list")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.process_list.sizePolicy().hasHeightForWidth())
@@ -90,7 +85,6 @@ class Ui_system_tab(object):
 
         self.verticalLayout.addWidget(self.process_list)
 
-
         self.retranslateUi(system)
 
         QMetaObject.connectSlotsByName(system)
@@ -106,6 +100,7 @@ class Ui_system_tab(object):
         self.uptime.setText(QCoreApplication.translate("system", u"Uptime: ", None))
     # retranslateUi
 
+
 class system_tab(QWidget, Ui_system_tab):
     def __init__(self, parent=None):
         super(system_tab, self).__init__(parent)
@@ -119,14 +114,18 @@ class system_tab(QWidget, Ui_system_tab):
 
         self.process_list.horizontalHeader().setStretchLastSection(True)
         self.process_list.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
-        self._model = List_Model(list(self._monitor.data.system.process_list.values()), horizontal_header=["Name", "PID", "Path"])
+        self._model = List_Model(list(self._monitor.data.system.process_list.values()),
+                                 horizontal_header=["Name", "PID", "Path"])
         self.process_list.setModel(self._model)
 
     def draw(self):
-        self.uptime.setText(f'{self.uptime.text().split(": ")[0]}: {str(self._monitor.data.system.boot_time).split(".")[0]}')
+        self.uptime.setText(
+            f'{self.uptime.text().split(": ")[0]}: {str(self._monitor.data.system.boot_time).split(".")[0]}')
         ui_pids = {self._model.data(self._model.index(x, 1)) for x in range(self._model.rowCount())}
         active_pids = set(self._monitor.data.system.process_list.keys())
-        remove = (self._model.match(self._model.index(0, 1), Qt.ItemDataRole.DisplayRole, x, 1, Qt.MatchFlag.MatchExactly) for x in ui_pids.difference(active_pids))
+        remove = (
+        self._model.match(self._model.index(0, 1), Qt.ItemDataRole.DisplayRole, x, 1, Qt.MatchFlag.MatchExactly) for x
+        in ui_pids.difference(active_pids))
         add = active_pids.difference(ui_pids)
         for x, y in zip_longest(remove, add):
             if x:
