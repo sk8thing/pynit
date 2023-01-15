@@ -87,14 +87,16 @@ class disk_tab(QWidget, Ui_disk_tab):
         self.part_list.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self._model_part = List_Model(list(self._monitor.data.disk.partitions.values()),
                                       vertical_header=list(self._monitor.data.disk.partitions.keys()),
-                                      horizontal_header=["Total", "Used", "Free", "Usage[%]", "Format"])
+                                      horizontal_header=["Total", "Used", "Free", "Usage[%]", "Format"],
+                                      center_text=True)
         self.part_list.setModel(self._model_part)
 
         self.disk_list.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.disk_list.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self._model_disk = List_Model(list(self._monitor.data.disk.disks.values()),
                                       vertical_header=list(self._monitor.data.disk.disks.keys()),
-                                      horizontal_header=["Read Speed", "Write Speed"])
+                                      horizontal_header=["Read Speed", "Write Speed"],
+                                      center_text=True)
         self.disk_list.setModel(self._model_disk)
 
         self.comp_plot.plotItem.hideAxis("bottom")

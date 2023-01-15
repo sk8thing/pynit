@@ -6,7 +6,7 @@ from HardwareMonitor import Monitor
 def main():
     try:
         app = QApplication(sys.argv)
-        monitor = Monitor()
+        Monitor()
         window = main_window()
         load_theme(app)
         window.show()

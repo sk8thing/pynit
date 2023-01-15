@@ -4,11 +4,12 @@ import operator
 
 
 class List_Model(QAbstractTableModel):
-    def __init__(self, data, vertical_header=None, horizontal_header=None):
+    def __init__(self, data, vertical_header=None, horizontal_header=None, center_text=False):
         super(List_Model, self).__init__()
         self._data = data
         self._v_header = vertical_header
         self._h_header = horizontal_header
+        self._center_text = center_text
 
     def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
         if role == Qt.DisplayRole:
@@ -29,6 +30,8 @@ class List_Model(QAbstractTableModel):
         if index.isValid():
             if role == Qt.DisplayRole:
                 return self._data[index.row()][index.column()]
+            elif role == Qt.TextAlignmentRole and self._center_text:
+                return Qt.AlignmentFlag.AlignCenter
         return None
 
     def sort(self, Ncol, order=None):

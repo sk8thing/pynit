@@ -94,7 +94,8 @@ class history_tab(QWidget, Ui_history_tab):
         self._model = List_Model([[0 for col in range(4)] for row in range(3)],
                                  ["CPU Usage[%]", "CPU Temperature[°C]", "Memory Usage[%]", "GPU Usage[%]",
                                   "GPU Temperature[°C]"],
-                                 ["Current", "Min", "Max", "Avg"])
+                                 ["Current", "Min", "Max", "Avg"],
+                                 center_text=True)
         self.list.setModel(self._model)
         if self._monitor.data.gpu is not None:
             self._model.insertRow(self._model.rowCount() - 1, rowData=[0 for x in range(4)])
